@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-var FS http.FileSystem = AssetFile()
+var WebBundle http.FileSystem = AssetFile()
 
 type endpointConfig struct {
 	Endpoint             string `json:"endpoint"`
