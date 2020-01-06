@@ -18,3 +18,5 @@ lib
 /middleware
 playground.css
 *.log
+
+/public/*.graphql
