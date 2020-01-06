@@ -45,7 +45,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
     super(props)
 
     this.state = {
-      endpoint: 'http://localhost:8888/api/graphql',
+      endpoint: props.endpoint,
       subscriptionEndpoint: props.subscriptionEndpoint,
       loading: false,
       headers: props.headers || {},
@@ -53,31 +53,37 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
   }
 
   componentWillMount() {
-    if (this.props.match.params.id) {
-      if (this.props.match.params.id === 'new') {
-        return
-      }
-      this.setState({ loading: true })
+    this.setState({ loading: true })
 
-      // DOM side-effect:
-      // #loading-wrapper is a hardcoded DOM element in the HTML entrypoint
-      const loadingWrapper = document.getElementById('loading-wrapper')
+    // DOM side-effect:
+    // #loading-wrapper is a hardcoded DOM element in the HTML entrypoint
+    const loadingWrapper = document.getElementById('loading-wrapper')
 
-      if (loadingWrapper) {
-        loadingWrapper.classList.remove('fadeOut')
-      }
-
-      setTimeout(() => {
-        if (loadingWrapper) {
-          loadingWrapper.remove()
-        }
-      }, 1000)
-
-      // this.props.injectState(state)
-      this.setState({
-        loading: false,
-      })
+    if (loadingWrapper) {
+      loadingWrapper.classList.remove('fadeOut')
     }
+
+    setTimeout(() => {
+      if (loadingWrapper) {
+        loadingWrapper.remove()
+      }
+    }, 1000)
+
+    fetch(`${location.origin}/_endpoint`, {
+      method: 'get',
+    })
+      .then(res => res.json())
+      .then(res => {
+        if (loadingWrapper) {
+          loadingWrapper.classList.add('fadeOut')
+        }
+
+        this.setState({
+          endpoint: res.endpoint,
+          subscriptionEndpoint: res.subscriptionEndpoint,
+          loading: false,
+        })
+      })
   }
 
   render() {
