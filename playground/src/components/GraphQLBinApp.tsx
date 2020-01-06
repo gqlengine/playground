@@ -69,7 +69,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
       }
     }, 1000)
 
-    fetch(`${location.origin}/_endpoint`, {
+    fetch(`${location.href}/_endpoint`, {
       method: 'get',
     })
       .then(res => res.json())
