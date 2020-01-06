@@ -272,7 +272,10 @@
 
       GraphQLPlayground.init(root, {
         "env": "react",
-        "canSaveConfig": false,
+        "canSaveConfig": true,
+        "settings": {
+          "request.credentials": "include"
+        },
         "headers": {
           "test": "test",
         }
