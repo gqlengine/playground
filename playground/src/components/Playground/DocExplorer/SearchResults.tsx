@@ -46,13 +46,19 @@ export default class SearchResults extends React.Component<Props, {}> {
         break
       }
 
+      if (typeName.startsWith("__")) {
+        continue
+      }
+
       const type = typeMap[typeName]
-      if (withinType !== type && isMatch(typeName, searchValue)) {
-        matchedTypes.push(
-          <div className="doc-category-item" key={typeName}>
-            <TypeLink type={type} x={level} y={count++} lastActive={false} />
-          </div>,
-        )
+      if (withinType !== type) {
+        if (isMatch(typeName, searchValue) || isMatch(type.description, searchValue)) {
+          matchedTypes.push(
+              <div className="doc-category-item" key={typeName}>
+                <TypeLink type={type} x={level} y={count++} lastActive={false} />
+              </div>,
+          )
+        }
       }
 
       if (type.getFields) {
@@ -62,7 +68,7 @@ export default class SearchResults extends React.Component<Props, {}> {
           field.parent = type
           let matchingArgs
 
-          if (!isMatch(fieldName, searchValue)) {
+          if (!isMatch(fieldName, searchValue) && !isMatch(field.description, searchValue)) {
             if (field.args && field.args.length) {
               matchingArgs = field.args.filter(arg =>
                 isMatch(arg.name, searchValue),

@@ -87,6 +87,16 @@ export class SchemaFetcher {
   hash(session: SchemaFetchProps) {
     return `${session.endpoint}~${session.headers || ''}`
   }
+
+  private stripSchema(schema: GraphQLSchema) {
+    // @ts-ignore
+    if (schema._queryType._fields["__tags"]) {
+      // @ts-ignore
+      delete schema._queryType._fields["__tags"]
+    }
+    return schema
+  }
+
   private getSchema(data: any) {
     const schemaString = JSON.stringify(data)
     const cachedSchema = this.schemaInstanceCache.get(schemaString)
@@ -94,8 +104,7 @@ export class SchemaFetcher {
       return cachedSchema
     }
 
-    const schema = buildClientSchema(data as any)
-
+    const schema = this.stripSchema(buildClientSchema(data as any))
     this.schemaInstanceCache.set(schemaString, schema)
 
     return schema

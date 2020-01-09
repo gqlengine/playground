@@ -213,12 +213,14 @@ class SideTabs extends React.Component<
           true,
           this.props.docs.activeTabIdx,
         )
-        this.props.changeWidthDocs(this.props.sessionId, docsSize)
+        if (this.props.changeWidthDocs) {
+          this.props.changeWidthDocs(this.props.sessionId, docsSize)
+        }
       }
     }
 
     let onMouseUp: any = () => {
-      if (!this.props.docs.docsOpen) {
+      if (!this.props.docs.docsOpen && this.props.changeWidthDocs) {
         this.props.changeWidthDocs(this.props.sessionId, hadWidth)
       }
 

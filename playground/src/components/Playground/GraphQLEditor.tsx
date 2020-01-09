@@ -274,10 +274,16 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
           setActiveContentRef={this.setSideTabActiveContentRef}
           setWidth={this.setDocsWidth}
         >
-          <SideTab label="Docs" activeColor="green" tabWidth="49px">
+          <SideTab label="Docs" activeColor="green" tabWidth="65px">
             <GraphDocs
               schema={this.props.schema}
               ref={this.setDocExplorerRef}
+            />
+          </SideTab>
+          <SideTab label="Tags" activeColor="purple" tabWidth="65px">
+            <GraphDocs
+                schema={this.props.schema}
+                ref={this.setDocExplorerRef}
             />
           </SideTab>
           <SideTab label="Schema" activeColor="blue" tabWidth="65px">
