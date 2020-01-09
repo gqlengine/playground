@@ -280,13 +280,13 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
               ref={this.setDocExplorerRef}
             />
           </SideTab>
-          <SideTab label="Tags" activeColor="purple" tabWidth="65px">
-            <GraphDocs
-                schema={this.props.schema}
-                ref={this.setDocExplorerRef}
-            />
-          </SideTab>
-          <SideTab label="Schema" activeColor="blue" tabWidth="65px">
+          {/*<SideTab label="Tags" activeColor="blue" tabWidth="65px">*/}
+          {/*  <GraphDocs*/}
+          {/*      schema={this.props.schema}*/}
+          {/*      ref={this.setDocExplorerRef}*/}
+          {/*  />*/}
+          {/*</SideTab>*/}
+          <SideTab label="Schema" activeColor="purple" tabWidth="65px">
             <SDLView
               schema={this.props.schema}
               ref={this.setSchemaExplorerRef}

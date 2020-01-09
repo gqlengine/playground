@@ -88,15 +88,18 @@ export class SchemaFetcher {
     return `${session.endpoint}~${session.headers || ''}`
   }
 
-  private stripSchema(schema: GraphQLSchema) {
-    // @ts-ignore
-    if (schema._queryType._fields["__tags"]) {
-      // @ts-ignore
-      delete schema._queryType._fields["__tags"]
+  private stripSchema(data: any) {
+    if (data) {
+      const {__schema: {queryType: {name: queryName}, types}} = data;
+      data.__schema.types = types.map((type) => {
+        if (type.name === queryName) {
+          type.fields = type.fields.filter(({name}) => name !== '__tags')
+        }
+        return type;
+      }).filter(({name}) => name !== '__TagEntry' && name !== '__Tag');
     }
-    return schema
+    return data;
   }
-
   private getSchema(data: any) {
     const schemaString = JSON.stringify(data)
     const cachedSchema = this.schemaInstanceCache.get(schemaString)
@@ -104,7 +107,7 @@ export class SchemaFetcher {
       return cachedSchema
     }
 
-    const schema = this.stripSchema(buildClientSchema(data as any))
+    const schema = buildClientSchema(this.stripSchema(data))
     this.schemaInstanceCache.set(schemaString, schema)
 
     return schema

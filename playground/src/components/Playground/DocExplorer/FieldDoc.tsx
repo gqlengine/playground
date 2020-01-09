@@ -60,7 +60,6 @@ export default class FieldDoc extends React.Component<Props, State> {
     let type = field.type || field
     const obj = serialize(schema, field)
     type = getDeeperType(type)
-    const argsOffset = obj.fields.length + obj.interfaces.length
     const implementationsOffset =
       obj.fields.length + obj.interfaces.length + obj.args.length
 
@@ -78,6 +77,11 @@ export default class FieldDoc extends React.Component<Props, State> {
 
     return (
       <div ref={this.setRef}>
+        <FieldDocsDescription
+            className="doc-type-description"
+            markdown={field.description || ''}
+        />
+
         <DocsHeader>
           <TypeLink
             type={field}
@@ -87,12 +91,27 @@ export default class FieldDoc extends React.Component<Props, State> {
             lastActive={false}
           />
         </DocsHeader>
-        <DocsDescription
-          className="doc-type-description"
-          markdown={field.description || ''}
-        />
+
+        {obj.args && obj.args.length > 0 && (
+            <div>
+              <CategoryTitle>arguments</CategoryTitle>
+              {obj.args.map((arg, index) => (
+                  <div key={arg.name}>
+                    <div>
+                      <Argument
+                          arg={arg}
+                          x={level}
+                          y={index}
+                          sessionId={this.props.sessionId}
+                      />
+                    </div>
+                  </div>
+              ))}
+            </div>
+        )}
 
         <CategoryTitle>{`${typeInstance} details`}</CategoryTitle>
+
         {type.description &&
           type.description.length > 0 && (
             <DocsDescription markdown={type.description || ''} />
@@ -117,25 +136,6 @@ export default class FieldDoc extends React.Component<Props, State> {
               level={level}
               sessionId={this.props.sessionId}
             />
-          )}
-
-        {obj.args &&
-          obj.args.length > 0 && (
-            <div>
-              <CategoryTitle>arguments</CategoryTitle>
-              {obj.args.map((arg, index) => (
-                <div key={arg.name}>
-                  <div>
-                    <Argument
-                      arg={arg}
-                      x={level}
-                      y={index + argsOffset}
-                      sessionId={this.props.sessionId}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
           )}
 
         {obj.implementations &&
@@ -191,6 +191,14 @@ const DocsHeader = styled.div`
     background: transparent;
     pointer-events: none;
   }
+`
+
+const FieldDocsDescription = styled(MarkdownContent)`
+  font-size: 14px;
+  padding: 0;
+  color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0,0,0,0.07);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 `
 
 const DocsDescription = styled(MarkdownContent)`
