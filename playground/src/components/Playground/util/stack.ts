@@ -196,19 +196,20 @@ export function getElement(obj: any, index: number) {
 
 export function getElementIndex(schema: any, main: any, element: any) {
   const obj = serialize(schema, main)
+
+  const argsIndex = obj.args.indexOf(element)
+  if (argsIndex > -1) {
+    return argsIndex
+  }
+
   const interfaceIndex = obj.interfaces.indexOf(element)
   if (interfaceIndex > -1) {
-    return interfaceIndex
+    return obj.args.length + interfaceIndex
   }
 
   const fieldsIndex = obj.fields.indexOf(element)
   if (fieldsIndex > -1) {
-    return obj.interfaces.length + fieldsIndex
-  }
-
-  const argsIndex = obj.args.indexOf(element)
-  if (argsIndex > -1) {
-    return obj.interfaces.length + obj.fields.length + argsIndex
+    return obj.interfaces.length + obj.args.length + fieldsIndex
   }
 
   const implementationIndex = obj.implementations.indexOf(element)
