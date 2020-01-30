@@ -39,7 +39,7 @@ export class SettingsEditor extends React.Component<Props, {}> {
               isYaml={this.props.isYaml}
               readOnly={this.props.readOnly}
             />
-            <PlaygroundVersion>{window.version}</PlaygroundVersion>
+            <PlaygroundVersion>Playground Version: {window.version}</PlaygroundVersion>
           </EditorWrapper>
           {!this.props.readOnly && (
             <ButtonWrapper>
