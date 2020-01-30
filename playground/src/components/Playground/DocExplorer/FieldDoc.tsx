@@ -96,7 +96,7 @@ export default class FieldDoc extends React.Component<Props, State> {
             <div>
               <CategoryTitle>arguments</CategoryTitle>
               {obj.args.map((arg, index) => (
-                  <div key={"arg"+arg.name}>
+                  <div key={arg.name}>
                     <div>
                       <Argument
                           arg={arg}

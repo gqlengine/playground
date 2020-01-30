@@ -44,6 +44,7 @@ module.exports = {
   appBuild: resolveApp('build'),
   appPublic: resolveApp('public'),
   appHtml: resolveApp('public/index.html'),
+  appEndpoint: resolveApp('public/_endpoint'),
   appIndexJs: resolveApp('src/index.tsx'),
   middlewareIndexJs: resolveApp('src/middlewareIndex.tsx'),
   localDevIndexJs: resolveApp('src/localDevIndex.tsx'),

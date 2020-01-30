@@ -12,7 +12,7 @@ export interface DocTypeSchemaProps {
   sessionId: string
 }
 
-export default ({ type, fields, interfaces, level, indexOffset }: DocTypeSchemaProps) => {
+export default ({ type, fields, interfaces, level, indexOffset = 0 }: DocTypeSchemaProps) => {
   const nonDeprecatedFields = fields.filter(data => !data.isDeprecated)
   const deprecatedFields = fields.filter(data => data.isDeprecated)
 
