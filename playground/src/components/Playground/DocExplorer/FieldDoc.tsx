@@ -96,7 +96,7 @@ export default class FieldDoc extends React.Component<Props, State> {
             <div>
               <CategoryTitle>arguments</CategoryTitle>
               {obj.args.map((arg, index) => (
-                  <div key={arg.name}>
+                  <div key={"arg"+arg.name}>
                     <div>
                       <Argument
                           arg={arg}
@@ -134,6 +134,7 @@ export default class FieldDoc extends React.Component<Props, State> {
               fields={obj.fields}
               interfaces={obj.interfaces}
               level={level}
+              indexOffset={obj.args? obj.args.length: 0}
               sessionId={this.props.sessionId}
             />
           )}

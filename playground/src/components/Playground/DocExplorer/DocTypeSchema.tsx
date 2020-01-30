@@ -8,15 +8,16 @@ export interface DocTypeSchemaProps {
   fields: any[]
   interfaces: any[]
   level: number
+  indexOffset: number
   sessionId: string
 }
 
-export default ({ type, fields, interfaces, level }: DocTypeSchemaProps) => {
+export default ({ type, fields, interfaces, level, indexOffset }: DocTypeSchemaProps) => {
   const nonDeprecatedFields = fields.filter(data => !data.isDeprecated)
   const deprecatedFields = fields.filter(data => data.isDeprecated)
 
   const typeInstance =
-    type instanceof GraphQLInterfaceType ? 'interface ' : 'type'
+    type instanceof GraphQLInterfaceType ? 'interface ' : 'type';
 
   return (
     <DocTypeSchema>
@@ -30,7 +31,7 @@ export default ({ type, fields, interfaces, level }: DocTypeSchemaProps) => {
           key={data.name}
           type={data}
           x={level}
-          y={index}
+          y={index + indexOffset}
           collapsable={true}
           beforeNode={<span className="field-name">implements</span>}
           afterNode={
@@ -44,7 +45,7 @@ export default ({ type, fields, interfaces, level }: DocTypeSchemaProps) => {
           key={data.name}
           type={data}
           x={level}
-          y={index + interfaces.length}
+          y={index + interfaces.length + indexOffset}
           collapsable={true}
           lastActive={false}
         />
@@ -58,7 +59,7 @@ export default ({ type, fields, interfaces, level }: DocTypeSchemaProps) => {
           <TypeLink
             type={data}
             x={level}
-            y={index + nonDeprecatedFields.length + interfaces.length}
+            y={index + nonDeprecatedFields.length + interfaces.length + indexOffset}
             collapsable={true}
             lastActive={false}
           />
