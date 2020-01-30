@@ -176,19 +176,19 @@ export function serialize(schema, field) {
 
 // Return element that match index on object
 export function getElement(obj: any, index: number) {
-  let i = 0
-  if (obj.interfaces[index + i]) {
-    return obj.interfaces[index + i]
-  }
-  i += obj.interfaces.length
-  if (obj.fields[index - i]) {
-    return obj.fields[index - i]
-  }
-  i += obj.fields.length
+  let i = 0;
   if (obj.args[index - i]) {
     return obj.args[index - i]
   }
-  i += obj.args.length
+  i += obj.args.length;
+  if (obj.interfaces[index + i]) {
+    return obj.interfaces[index + i]
+  }
+  i += obj.interfaces.length;
+  if (obj.fields[index - i]) {
+    return obj.fields[index - i]
+  }
+  i += obj.fields.length;
   if (obj.implementations[index - i]) {
     return obj.implementations[index - i]
   }
