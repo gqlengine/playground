@@ -359,7 +359,7 @@ const TabsGradient = styled.div`
   pointer-events: none;
   content: '';
   background: ${p =>
-    p.index === 0
+    p.index <= 1
       ? `linear-gradient(
 		to right,
 		rgba(255, 255, 255, 1) 30%,

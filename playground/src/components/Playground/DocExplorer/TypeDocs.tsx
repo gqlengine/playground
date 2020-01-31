@@ -16,8 +16,6 @@ import { columnWidth } from '../../../constants'
 import RootColumn from './RootColumn'
 import {
   serialize,
-  getElementRoot,
-  serializeRoot,
   getElement,
 } from '../util/stack'
 import { getSessionDocs } from '../../../state/docs/selectors'
@@ -26,6 +24,7 @@ import { createStructuredSelector } from 'reselect'
 import { SideTabContentProps } from '../ExplorerTabs/SideTabs'
 import { ErrorContainer } from './ErrorContainer'
 import { styled } from '../../../styled'
+import {getType, sortTypesFromSchema} from "../util/typeSorts";
 
 interface StateFromProps {
   docs: {
@@ -202,8 +201,8 @@ class TypeDocs extends React.Component<
             )
           }
         } else {
-          const obj = serializeRoot(this.props.schema)
-          const element = getElementRoot(obj, 0)
+          const sorts = sortTypesFromSchema(this.props.schema);
+          const element = getType(sorts, 0);
           if (element) {
             this.props.addStack(this.props.sessionId, element, 0, 0)
           }
@@ -226,12 +225,9 @@ class TypeDocs extends React.Component<
             )
           }
         } else {
-          const obj = serializeRoot(this.props.schema)
+          const sorts = sortTypesFromSchema(this.props.schema);
           const y = lastNavStack ? lastNavStack.y : 0
-          const element = getElementRoot(
-            obj,
-            keyPressed === 'up' ? y - 1 : y + 1,
-          )
+          const element = getType(sorts, keyPressed === 'up' ? y - 1 : y + 1);
           if (element) {
             this.props.addStack(
               this.props.sessionId,
