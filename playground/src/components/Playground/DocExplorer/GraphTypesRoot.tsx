@@ -9,6 +9,7 @@ export interface Props {
 }
 
 const builtinTypes = [
+    "Void",
     "DateTime",
     "Duration",
     "Upload",
@@ -52,4 +53,4 @@ const DocsRoot = styled.div`
   .doc-category-item .field-name {
     color: #f25c54;
   }
-`
+`;
