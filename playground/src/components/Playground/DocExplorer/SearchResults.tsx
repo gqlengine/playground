@@ -8,6 +8,7 @@ export interface Props {
   searchValue: string
   level: number
   sessionId: string
+  typeOnly?: boolean
 }
 
 export default class SearchResults extends React.Component<Props, {}> {
@@ -19,7 +20,7 @@ export default class SearchResults extends React.Component<Props, {}> {
   }
 
   render() {
-    const { level } = this.props
+    const { level, sessionId, typeOnly } = this.props
     const searchValue = this.props.searchValue
     const withinType = this.props.withinType
     const schema = this.props.schema
@@ -37,7 +38,26 @@ export default class SearchResults extends React.Component<Props, {}> {
       typeNames.unshift(withinType.name)
     }
 
-    let count = 0
+    const heads: string[] = [];
+    const queryIdx = typeNames.indexOf("Query");
+    if (queryIdx >= 0) {
+      heads.push("Query");
+      typeNames.splice(queryIdx, 1)
+    }
+    const mutationIdx = typeNames.indexOf("Mutation");
+    if (mutationIdx >= 0) {
+      heads.push("Mutation");
+      typeNames.splice(mutationIdx, 1)
+    }
+    const subscriptionIdx = typeNames.indexOf("Subscription");
+    if (subscriptionIdx >= 0) {
+      heads.push("Subscription");
+      typeNames.splice(subscriptionIdx, 1)
+    }
+
+    typeNames = heads.concat(typeNames);
+
+    let count = 0;
     for (const typeName of typeNames) {
       if (
         matchedWithin.length + matchedTypes.length + matchedFields.length >=
@@ -51,17 +71,8 @@ export default class SearchResults extends React.Component<Props, {}> {
       }
 
       const type = typeMap[typeName]
-      if (withinType !== type) {
-        if (isMatch(typeName, searchValue) || isMatch(type.description, searchValue)) {
-          matchedTypes.push(
-              <div className="doc-category-item" key={typeName}>
-                <TypeLink type={type} x={level} y={count++} lastActive={false} />
-              </div>,
-          )
-        }
-      }
 
-      if (type.getFields) {
+      if (type.getFields && !typeOnly) {
         const fields = type.getFields()
         Object.keys(fields).forEach(fieldName => {
           const field = fields[fieldName]
@@ -90,6 +101,8 @@ export default class SearchResults extends React.Component<Props, {}> {
                 y={count++}
                 showParentName={true}
                 lastActive={false}
+                showTitle={true}
+                sessionId={sessionId}
               />
             </div>
           )
@@ -101,10 +114,28 @@ export default class SearchResults extends React.Component<Props, {}> {
           }
         })
       }
+
+      if (withinType !== type) {
+        if (isMatch(typeName, searchValue) || isMatch(type.description, searchValue)) {
+          matchedTypes.push(
+              <div className="doc-category-item" key={typeName}>
+                <TypeLink
+                    type={type}
+                    x={level}
+                    y={count++}
+                    lastActive={false}
+                    showTitle={true}
+                    sessionId={sessionId}
+                />
+              </div>,
+          )
+        }
+      }
+
     }
 
     if (
-      matchedWithin.length + matchedTypes.length + matchedFields.length ===
+        matchedWithin.length + matchedTypes.length + matchedFields.length ===
       0
     ) {
       return <NoResult>No results found.</NoResult>
@@ -116,8 +147,8 @@ export default class SearchResults extends React.Component<Props, {}> {
           {matchedWithin}
           <div className="doc-category">
             <div className="doc-category-title">{'other results'}</div>
-            {matchedTypes}
             {matchedFields}
+            {matchedTypes}
           </div>
         </div>
       )
@@ -126,8 +157,8 @@ export default class SearchResults extends React.Component<Props, {}> {
     return (
       <div>
         {matchedWithin}
-        {matchedTypes}
         {matchedFields}
+        {matchedTypes}
       </div>
     )
   }

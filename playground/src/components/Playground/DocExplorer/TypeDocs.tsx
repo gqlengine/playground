@@ -123,6 +123,7 @@ class TypeDocs extends React.Component<
               searchValue={this.state.searchValue}
               handleSearch={this.handleSearch}
               sessionId={this.props.sessionId}
+              typeOnly={true}
             />
           )}
         {navStack.map((stack, index) => (

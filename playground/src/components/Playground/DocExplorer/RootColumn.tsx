@@ -13,11 +13,12 @@ export interface Props {
   handleSearch: (value: string) => void
   sessionId: string
   showSchema: boolean
+  typeOnly?: boolean
 }
 
 export default class RootColumn extends React.PureComponent<Props, {}> {
   render() {
-    const { searchValue, schema, width, sessionId, handleSearch, showSchema } = this.props
+    const { searchValue, schema, width, sessionId, handleSearch, showSchema, typeOnly } = this.props
     return (
       <ColumnDoc width={width} overflow={false}>
         <SearchBox onSearch={handleSearch} />
@@ -28,6 +29,7 @@ export default class RootColumn extends React.PureComponent<Props, {}> {
               schema={schema}
               level={0}
               sessionId={sessionId}
+              typeOnly={typeOnly}
             />
           )}
           {!searchValue && showSchema && (
