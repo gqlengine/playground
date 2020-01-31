@@ -24,6 +24,7 @@ Props) {
         x={x}
         y={y}
         lastActive={false}
+        showTitle={true}
         afterNode={
           arg.defaultValue !== undefined &&
           showDefaultValue !== false && (

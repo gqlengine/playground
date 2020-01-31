@@ -6,6 +6,7 @@ export interface EnumTypeSchemaProps {
   schema: any
   type: any
   level: number
+  indexOffset: number
   sessionId: string
 }
 
@@ -13,6 +14,7 @@ const UnionTypeSchema = ({
   schema,
   type,
   level,
+  indexOffset = 0,
   sessionId,
 }: EnumTypeSchemaProps) => {
   const types = schema.getPossibleTypes(type)
@@ -26,7 +28,7 @@ const UnionTypeSchema = ({
           key={value.name}
           type={value}
           x={level}
-          y={index + 1}
+          y={index + 1 + indexOffset}
           collapsable={true}
           sessionId={sessionId}
           lastActive={false}

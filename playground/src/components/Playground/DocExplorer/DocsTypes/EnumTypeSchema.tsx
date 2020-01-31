@@ -44,10 +44,10 @@ interface ValueProps {
 
 const Value = ({ value, isDeprecated, first }: ValueProps) => (
   <DocsValue first={first}>
-    <div className="field-name">{value.name}</div>
     {value.description && (
       <DocsValueComment>{value.description}</DocsValueComment>
     )}
+    <div className="field-name">{value.name}</div>
     {isDeprecated && (
       <DocsValueComment>Deprecated: {value.deprecationReason}</DocsValueComment>
     )}
@@ -68,5 +68,6 @@ const DocsValue = styled<DocsValueProps, 'div'>('div')`
 
 const DocsValueComment = styled.div`
   padding: 0 16px;
+  font-size: 12px;
   color: ${p => p.theme.colours.black50};
 `

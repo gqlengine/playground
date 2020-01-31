@@ -63,6 +63,7 @@ function ShowRootType({ name, fields, offset }: ShowRootTypeProps) {
             y={offset + index}
             collapsable={true}
             lastActive={false}
+            showTitle={true}
           />
         ))}
     </div>

@@ -14,7 +14,7 @@ interface Options {
   commentDescriptions?: boolean
 }
 
-const defaultTypes = [
+export const defaultTypes = [
   '__Schema',
   '__Directive',
   '__DirectiveLocation',
@@ -30,7 +30,7 @@ const defaultTypes = [
   'Float',
 ]
 
-/* Creates an array of SchemaTypes for the SDLFieldDocs 
+/* Creates an array of SchemaTypes for the SDLFieldDocs
 (A component that is similar to the DocsExplorer) to consume */
 export function sdlArray(schema: GraphQLSchema, options?: Options) {
   const objectValues =

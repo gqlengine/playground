@@ -123,6 +123,7 @@ export default class FieldDoc extends React.Component<Props, State> {
             type={type}
             schema={schema}
             level={level}
+            indexOffset={obj.args.length}
             sessionId={this.props.sessionId}
           />
         )}

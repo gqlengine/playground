@@ -48,6 +48,7 @@ export default ({ type, fields, interfaces, level, indexOffset = 0 }: DocTypeSch
           y={index + interfaces.length + indexOffset}
           collapsable={true}
           lastActive={false}
+          showTitle={true}
         />
       ))}
       {deprecatedFields.length > 0 && <br />}

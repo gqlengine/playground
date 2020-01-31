@@ -38,6 +38,7 @@ export interface Props {
   collapsable?: boolean
   lastActive: boolean
   sessionId: string
+  showTitle?: boolean
 }
 
 interface State {
@@ -120,6 +121,7 @@ class TypeLink extends React.Component<
       afterNode,
       showParentName,
       isActive,
+      showTitle = false,
     } = this.props
     const isGraphqlType = isType(type)
 
@@ -142,39 +144,49 @@ class TypeLink extends React.Component<
       >
         {beforeNode}
         {beforeNode && ' '}
-        {!isGraphqlType && (
-          <span>
+        <div>
+          {showTitle && type.description && (
+              <Title>
+                {type.description}
+              </Title>
+          )}
+          <div>
+            {!isGraphqlType && (
+                <span>
             <span className="field-name">{fieldName}</span>
-            {type.args &&
-              type.args.length > 0 && [
-                '(',
-                <span key="args">
+                  {type.args &&
+                  type.args.length > 0 && [
+                    '(',
+                    <span key="args">
                   {this.state.collapsed ? (
-                    <Dots>...</Dots>
+                      <Dots>...</Dots>
                   ) : (
-                    type.args.map(arg => (
-                      <ArgumentInline key={arg.name} arg={arg} />
-                    ))
+                      type.args.map(arg => (
+                          <ArgumentInline key={arg.name} arg={arg} />
+                      ))
                   )}
                 </span>,
-                ')',
-              ]}
-            {': '}
+                    ')',
+                  ]}
+                  {': '}
           </span>
-        )}
-        <span className="type-name">{renderType(type.type || type)}</span>
-        {type.defaultValue !== undefined ? (
-          <DefaultValue>
-            {' '}
-            = <span>{`${JSON.stringify(type.defaultValue, null, 2)}`}</span>
-          </DefaultValue>
-        ) : (
-          undefined
-        )}
+            )}
+            <span className="type-name">{renderType(type.type || type)}</span>
+            {type.defaultValue !== undefined ? (
+                <DefaultValue>
+                  {' '}
+                  = <span>{`${JSON.stringify(type.defaultValue, null, 2)}`}</span>
+                </DefaultValue>
+            ) : (
+                undefined
+            )}
+          </div>
+        </div>
+
         {clickable && (
-          <IconBox>
-            <Triangle />
-          </IconBox>
+            <IconBox>
+              <Triangle />
+            </IconBox>
         )}
         {afterNode && ' '}
         {afterNode}
@@ -186,18 +198,18 @@ class TypeLink extends React.Component<
 function renderType(type) {
   if (type instanceof GraphQLNonNull) {
     return (
-      <span>
+        <span>
         {renderType(type.ofType)}
-        {'!'}
+          {'!'}
       </span>
     )
   }
   if (type instanceof GraphQLList) {
     return (
-      <span>
+        <span>
         {'['}
-        {renderType(type.ofType)}
-        {']'}
+          {renderType(type.ofType)}
+          {']'}
       </span>
     )
   }
@@ -230,16 +242,16 @@ const mapStateToProps = (state, { x, y }) => {
 const selector = createSelector([mapStateToProps], s => s)
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {
-      addStack,
-    },
-    dispatch,
-  )
+    bindActionCreators(
+        {
+          addStack,
+        },
+        dispatch,
+    )
 
 export default connect<ReduxProps, DispatchFromProps, Props>(
-  selector,
-  mapDispatchToProps,
+    selector,
+    mapDispatchToProps,
 )(toJS(TypeLink))
 
 interface DocsCategoryItemProps {
@@ -267,6 +279,9 @@ const DocsCategoryItem = styled<DocsCategoryItemProps, 'div'>('div')`
     span {
       color: ${p => p.theme.colours.white} !important;
     }
+    div {
+      color: ${p => p.theme.colours.white} !important;
+    }
   }
   b {
     font-weight: 600;
@@ -290,3 +305,9 @@ const DefaultValue = styled.span`
     color: #1f61a9;
   }
 `
+
+const Title = styled.div`
+  color: #172a3a;
+  font-size: 12px;
+  font-weight: 500;
+`;

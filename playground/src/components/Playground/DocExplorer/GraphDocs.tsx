@@ -119,6 +119,7 @@ class GraphDocs extends React.Component<
           schema && (
             <RootColumn
               schema={schema}
+              showSchema={true}
               width={this.state.widthMap.root || columnWidth - 1}
               searchValue={this.state.searchValue}
               handleSearch={this.handleSearch}
