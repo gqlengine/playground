@@ -2,12 +2,9 @@ package playground
 
 import (
 	"encoding/json"
-	"net/http"
 	"os"
 	"time"
 )
-
-var WebBundle http.FileSystem = AssetFile()
 
 type endpointConfig struct {
 	Endpoint             string `json:"endpoint"`
