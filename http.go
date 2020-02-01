@@ -37,7 +37,7 @@ func NewPlayground(pathPrefix, endpoint, wsEndpoint string) Playground {
 		SubscriptionEndpoint: wsEndpoint,
 	})
 	p.assetFs = AssetFile().(*assetOperator)
-	p.handler = http.StripPrefix(pathPrefix, http.FileServer(p.assetFs))
+	p.handler = http.StripPrefix(pathPrefix, http.FileServer(&p))
 	return &p
 }
 
