@@ -40,7 +40,7 @@ export function sortTypesFromSchema(schema: GraphQLSchema): TypeSorts {
     }
     const typeMap = schema.getTypeMap();
     const typeNames = Object.keys(typeMap).filter(name =>
-        !defaultTypes.includes(name) && !builtinTypes.includes(name)
+        !defaultTypes.includes(name) && !builtinTypes.includes(name) && !name.startsWith('__')
     ).sort();
     typeNames.forEach((typeName) => {
         const type = typeMap[typeName];

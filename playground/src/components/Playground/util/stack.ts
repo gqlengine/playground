@@ -1,4 +1,4 @@
-import { isType, GraphQLInterfaceType, GraphQLObjectType } from 'graphql'
+import { isType, GraphQLInterfaceType, GraphQLObjectType } from "graphql";
 import { Map } from 'immutable'
 
 export function getNewStack(root, schema, stack: Map<any, any>) {
@@ -64,15 +64,24 @@ export interface SerializedRoot {
   subscriptions: any[]
 }
 
+function filterRootFields(rootType: GraphQLObjectType | undefined | null): any {
+  if (!rootType) {
+    return null
+  }
+  const fields = { ...rootType.getFields()};
+  Object.keys(fields).forEach((fieldName) => {
+    if (fieldName.startsWith('__')) {
+      delete fields[fieldName];
+    }
+  });
+  return fields;
+}
+
 export function getRootMap(schema): any {
   return {
-    ...schema.getQueryType().getFields(),
-    ...(schema.getMutationType &&
-      schema.getMutationType() &&
-      schema.getMutationType().getFields()),
-    ...(schema.getSubscriptionType &&
-      schema.getSubscriptionType() &&
-      schema.getSubscriptionType().getFields()),
+    ...filterRootFields(schema.getQueryType()),
+    ...(schema.getMutationType && filterRootFields(schema.getMutationType())),
+    ...(schema.getSubscriptionType && filterRootFields(schema.getSubscriptionType())),
   }
 }
 
@@ -85,33 +94,39 @@ export function serializeRoot(schema): SerializedRoot {
   }
   const queryType = schema.getQueryType()
   const queryFieldMap = queryType.getFields()
-  obj.queries = Object.keys(queryFieldMap).map(fieldName => {
-    const field = queryFieldMap[fieldName]
-    field.path = fieldName
-    field.parent = null
-    return field
-  })
-  const mutationType = schema.getMutationType && schema.getMutationType()
-  if (mutationType) {
-    const mutationFieldMap = mutationType.getFields()
-    obj.mutations = Object.keys(mutationFieldMap).map(fieldName => {
-      const field = mutationFieldMap[fieldName]
+  obj.queries = Object.keys(queryFieldMap)
+    .filter(fieldName => !fieldName.startsWith('__'))
+    .map(fieldName => {
+      const field = queryFieldMap[fieldName]
       field.path = fieldName
       field.parent = null
       return field
-    })
+    });
+  const mutationType = schema.getMutationType && schema.getMutationType()
+  if (mutationType) {
+    const mutationFieldMap = mutationType.getFields()
+    obj.mutations = Object.keys(mutationFieldMap)
+      .filter(fieldName => !fieldName.startsWith('__'))
+      .map(fieldName => {
+        const field = mutationFieldMap[fieldName]
+        field.path = fieldName
+        field.parent = null
+        return field
+      })
   }
   ;(window as any).ss = schema
   const subscriptionType =
     schema.getSubscriptionType && schema.getSubscriptionType()
   if (subscriptionType) {
     const subscriptionFieldMap = subscriptionType.getFields()
-    obj.subscriptions = Object.keys(subscriptionFieldMap).map(fieldName => {
-      const field = subscriptionFieldMap[fieldName]
-      field.path = fieldName
-      field.parent = null
-      return field
-    })
+    obj.subscriptions = Object.keys(subscriptionFieldMap)
+      .filter(fieldName => !fieldName.startsWith('__'))
+      .map(fieldName => {
+        const field = subscriptionFieldMap[fieldName]
+        field.path = fieldName
+        field.parent = null
+        return field
+      })
   }
   return obj
 }
